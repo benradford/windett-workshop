@@ -1,0 +1,456 @@
+---
+title: "Data Management for Public Policy"
+output:
+  html_document:
+    df_print: paged
+date: "2025-03-13"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+**Outline for Today**
+
+Brief Intro to R Studio
+
+Importing different formats of datasets (eg. CSV, Stata, SPSS, etc)
+
+Basic cleaning tips such as re-coding of variables (factor to numeric & vice versa, creating new variables, handling missing values etc.)
+
+Merging Datasets
+
+Data Inspection and summary techniques
+
+*Base R and Tidyverse examples for most objectives in this presentation. Be careful with how you proceed learning R. 
+
+
+## **Basics of R**
+
+This is an R Markdown document that will show you some of the basics of using the R language for data querying, data analysis, and we'll even get into some basics of graphics in R.
+
+## Origins of R
+
+R is a data querying language that was created by Bell Labs, and currently maintained and curated by the R Core Team at the University of Auckland in New Zealand.
+
+
+**Comprehensive R Archived Network (CRAN)**
+
+A system of "mirrors"
+
+* Distributed network of servers around the world
+* Request that you use the mirror geographically closest to you
+* You can change your preferred mirror anytime
+
+Closest CRAN mirror to UNC Charlotte: Duke University (even though Duke sucks, Go Heels!)
+
+## **Installing R**
+
+The first time you install R, you will install the **Base** package.
+
+Has most of what you need to run standard statistics and most data querying procedures.
+
+Other packages can be downloaded for more specific or specialized tasks:
+
+* Graphics packages
+* Advanced regression modeling
+* Time series analysis
+* Econometric methods
+* Causal analysis
+* Quasi-experimental methods
+
+New versions of R are released every couple of months.
+
+Names of R Versions are fun to watch.
+
+* **How About a Twenty Six** (will releae 4-11-2025)
+* "Trophy Case"
+* "Pile of Lies"
+* "Puppy Cup"
+* "Angel Food Cake"
+* "Shortstop Beagle"
+* "Innocent and Trusting"
+* "Funny Looking Kid"
+* "Vigorous Calisthenics"
+
+
+
+## RStudio
+
+When working with R, you'll probably want to use **RStudio**, which is an IDE, or *"integrated development environment."*
+
+* *Doesn't replace R!* 
+* Must be used in conjunction with R.
+
+R works by writing code and executing the code. 
+
+RStudio just helps you to write that code and execute it properly.
+
+It also let's you easily adjust things like color schemes, tile arrangement and so on.  
+
+## Changing Options in RStudio
+
+Tools > Global Options > Pane Layout
+
+Tools > Global Options > Appearance
+
+**The two main windows you need to be able to see?**
+
+* **Console**
+* **Source**
+
+Make sure when you open RStudio that you have those two windows.
+
+* You will write your commands in the **Source** window. Those commands form your R script. (input)
+
+* When you execute those commands, the results will be shown in the **Console** window. (output)
+
+The other window options:
+
+Files, Plots, Packages, Help, Viewer
+
+* Helpful to show plots
+* Shows any files you have open
+* Shows results from help when you ask for it
+
+Environment, History, Connections
+
+* The main function here is that it shows you what objects are in R's memory
+* Those are the objects you can do stuff with
+* Gives you the option to import datasets, *but you don't need to use that option!*
+* Later in this document (and at multiple other points), we'll see how to open data sets
+
+## **Object Oriented Languages**
+
+R is an an object oriented language
+
+SPSS, SAS, and Stata are procedural languages
+
+Generally, object oriented languages operate by creating or defining objects and then executing functions on those objects.
+
+Objects can be:
+
+* Single numbers (i.e. scalars)
+* Single character strings (e.g. "Hello, World!")
+* Vectors (like, a single variable)
+* Matrices
+* Data Frames
+
+Most of the data sets you'll work with will be **data frames**.
+
+Objects have attributes:
+
+* Length
+* Class (numeric, integrer, character, matrix, data frame)
+
+Which functions you can execute on those objects depends on the class, and sometimes the length.
+
+## Creating Objects
+
+The name you give an object is *completely arbitrary* and totally up to you.
+
+Words of advice when naming objects:
+
+* Dynamic language
+* R is case-sensitive!!!
+* You may have to type the object's name a *bunch*
+* Easy to remember what it is
+
+**Okay. Let's create a few objects.**
+
+First, a character string.
+
+```{r}
+x <- "Hello, World!"  # Doesn't generate output, just creates the object, "x""
+print(x)  # Executes the print() function on the object, "x"
+```
+
+**R as a big calculator**
+
+```{r}
+x <- 3
+y <- 7
+x+y
+```
+
+*Notice how I created an object called "x" again? Because R is dynamic, it replaced the old contents with the new contents automatically.* 
+
+**Attributes of Objects**
+
+```{r}
+class(y)
+length(y)
+```
+
+## **WRITING SCRIPTS**
+
+In R, you will want to write scripts that store the code you write.
+
+The code is the "input" - tells the computer what to do
+
+No need to save the output if you save the input.
+
+In RStudio, you'll write these in the "Source" pane.
+
+You can save them as .R files.
+
+
+
+## **Opening Data**
+
+R can be used to open data stored in a variety of file types
+
+* Excel spreadsheets
+* SPSS .sav files
+* Text files
+* Files from the internet, like JSON or HTML files
+
+Most common - the **Comma Separated Value (.csv)** file
+
+You'll use the read.csv() function to open these kinds of files.
+
+This function simply reads the contents of a CSV file. 
+
+You'll also need to create an object, and then pass the contents of the CSV file to that object.
+
+> data <- read.csv(file.choose(),header=TRUE)
+
+This code, when used in an R script, would allow you to open data.
+
+The **file.choose()** option just tells R to open a file explorer window where you can manually specify which file you want to open.  The **header=TRUE** option tells R that the first row of the data file is not actual data, but rather is a header containing the names of the variables.
+
+If you don't use the file.choose() option, you'll have to specify the file path, which you can do, but can be cumbersome.
+
+In this file, you'll see me use specific file names, because I can't use the file.choose() option in an R Markdown file. But that's okay, don't worry about it. When you're running RStudio normally, you can use it all you like.
+
+Anywho, go ahead and open the data files I sent you. The code will look like this, except without the "#" at the beginning.
+
+
+
+
+The first thing we are going to do is install and read in libraries we will use. 
+
+```{r}
+# library(readxl)
+# library(lubridate)
+library(foreign)
+# library(here)
+library(tidyverse)
+library(haven)
+# library(readstata13)
+library(readr)
+library(readxl)
+# library(jpeg)
+# library(forcats)
+```
+
+## Setting Up the Environment
+
+```{r}
+# Check the working directory
+getwd()
+
+```
+
+Change your working directory to *this* directory by going to:
+
+1. Session (in the top menu bar) 
+2. Set Working Directory >  
+3. To Source File Location 
+
+## Loading Data
+
+### Read in Governors Race and Gender Data
+
+```{r}
+Governors_race_gender <- read_csv("Governors_race_gender.csv")
+head(Governors_race_gender)
+```
+
+### Read in Gubernatorial Winners Vote Data
+
+```{r}
+gubernatorial_winners_vote <- read_dta("gubernatorial_winners_vote.dta")
+```
+
+### Read in Governor Approval Annual Data
+
+```{r}
+SEAD_governor_annual_v1 <- read_dta("SEAD governor annual v1.dta")
+head(SEAD_governor_annual_v1)
+```
+
+### Read in State Abbreviations
+
+```{r}
+stateabbs2 <- read_dta("stateabbs2.dta")
+head(stateabbs2)
+```
+
+### Read in State Mood Data
+
+```{r}
+mood_nyt <- read_excel("mood_nyt.xls")
+head(mood_nyt)
+```
+
+
+## Standardizing Column Names
+
+```{r}
+# Convert column names to lowercase for consistency
+names(Governors_race_gender) <- tolower(names(Governors_race_gender))
+names(gubernatorial_winners_vote) <- tolower(names(gubernatorial_winners_vote))
+names(SEAD_governor_annual_v1) <- tolower(names(SEAD_governor_annual_v1))
+names(stateabbs2) <- tolower(names(stateabbs2))
+names(mood_nyt) <- tolower(names(mood_nyt))
+```
+
+## Verify Column Name Consistency
+```{r}
+# Check the names of all datasets to confirm standardization
+names(Governors_race_gender)
+names(gubernatorial_winners_vote)
+names(SEAD_governor_annual_v1)
+names(stateabbs2)
+names(mood_nyt)
+```
+```{r}
+# Rename 'statename' to 'state' in mood_nyt dataset
+mood_nyt <- mood_nyt %>% rename(state = statename)
+mood_nyt <- mood_nyt %>% rename(abb = cstate_initial)
+
+head(mood_nyt)
+```
+
+
+
+## Merging Data by State and Year
+```{r}
+# Perform sequential left joins to merge all datasets on state and year
+merged_data <- Governors_race_gender %>%
+  left_join(gubernatorial_winners_vote, by = c("state", "year")) %>%
+  left_join(SEAD_governor_annual_v1, by = c("state", "year")) %>%
+  left_join(stateabbs2, by = "state") %>%  # Merging state abbreviations (no year match required)
+  left_join(mood_nyt, by = c("state", "year"))
+```
+
+## Preview Merged Data
+```{r}
+glimpse(merged_data)
+head(merged_data)
+```
+Notice some of the variables we may want to use as a numeric value are stored as characters. That is OK, we can pick variables we want numeric and change the data format. 
+
+```{r}
+merged_data$race<-as.factor(merged_data$race)
+
+head(merged_data)
+
+```
+
+
+
+
+## Referencing the contents of your data frame.
+
+Variables are stored inside this data frame. You can reference the variables by name, using the **$** operator. 
+Here's how it works.
+
+Let's say you want to ask for summary statistics on gubernatorial voteshare in the American states. 
+
+Inside the "merged_data" data frame, there is a variable called "voteshare".
+
+We just need to ask R to show us some summary statistics on that variable.
+
+We'll use the summary() function to do so. 
+
+```{r}
+summary(merged_data$voteshare)
+```
+
+Or, maybe you wanted to know the mean and standard deviation of the winner totals in North Carolina
+
+Good thing there are functions to help us do that.
+
+```{r}
+# Filter the dataset for North Carolina and summarize 'voteshare'
+
+
+nc_voteshare_stats <- summary(merged_data[merged_data$state=="North Carolina","voteshare"])
+
+
+# Display the summary
+print(nc_voteshare_stats)
+summary(merged_data$voteshare)
+
+```
+What if we want to make new variables based on the ones we already have?
+
+Let’s make a categorical variable that bins the voteshare in the states into ranges.
+
+First, let’s look at how the voteshares are distributed.
+
+```{r}
+voteshare <- merged_data$voteshare
+
+table(voteshare)
+```
+
+
+```{r}
+votebin<-vector()
+length(votebin)<-length(voteshare)
+votebin[voteshare >= 0 & voteshare < 50] <- "1. 0-50"
+votebin[voteshare >= 50 & voteshare < 60] <- "2. 50-60"
+votebin[voteshare >= 60] <- "3. 60+"
+table(votebin)
+```
+
+```{r}
+class(votebin)
+```
+
+```{r}
+votebin<-as.factor(votebin)
+
+class(votebin)
+```
+```{r}
+plot(votebin)
+
+```  
+
+Here is a full example, using the Tidy approach that adds the created variable directly to our dataset.
+```{r}
+
+
+summary(merged_data$approval_smoothed)
+hist(merged_data$approval_smoothed)
+
+# Create variable within merged_data
+merged_data <- merged_data %>%
+  mutate(approval_bin = case_when(
+    approval_smoothed >= 0 & approval_smoothed < 50 ~ "Unpopular",
+    approval_smoothed >= 50  ~ "Popular",
+    TRUE ~ NA_character_  # Handles cases where approval is NA or doesn't fit any range
+  ))
+
+# Display the frequency table of votebin
+table(merged_data$approval_bin)
+
+
+
+
+# Create a bar plot of votebin categories
+ggplot(merged_data, aes(x = approval_bin)) +
+  geom_bar(fill = "skyblue", color = "black") +
+  labs(
+    title = "Distribution of Approval Bin Categories",
+    x = "Approval Categories",
+    y = "Frequency"
+  ) +
+  theme_minimal()
+
+```
+
